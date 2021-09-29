@@ -1,5 +1,6 @@
 package com.gunder.myservice
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -10,7 +11,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 //        inisialisasi button
         val btnStartService = findViewById<Button>(R.id.btn_start_service)
-        btnStartService.setOnClickListener {  }
+        btnStartService.setOnClickListener {
+            val mStartServiceIntent = Intent(this, MyService::class.java)
+            startService(mStartServiceIntent)
+        }
 
         val btnStartJonIntentService = findViewById<Button>(R.id.btn_start_job_intent_service)
         btnStartJonIntentService.setOnClickListener {  }
