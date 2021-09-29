@@ -17,12 +17,16 @@ class MainActivity : AppCompatActivity() {
         }
 
         val btnStartJonIntentService = findViewById<Button>(R.id.btn_start_job_intent_service)
-        btnStartJonIntentService.setOnClickListener {  }
+        btnStartJonIntentService.setOnClickListener {
+            val mStartIntentService = Intent(this, MyJobIntentService::class.java)
+            mStartIntentService.putExtra(MyJobIntentService.EXTRA_DURATION, 5000L)
+            MyJobIntentService.enqueueWork(this, mStartIntentService)
+        }
 
         val btnStartBoundService = findViewById<Button>(R.id.btn_start_bound_service)
-        btnStartBoundService.setOnClickListener {  }
+        btnStartBoundService.setOnClickListener { }
 
         val btnStopBoundService = findViewById<Button>(R.id.btn_stop_bound_service)
-        btnStopBoundService.setOnClickListener {  }
+        btnStopBoundService.setOnClickListener { }
     }
 }

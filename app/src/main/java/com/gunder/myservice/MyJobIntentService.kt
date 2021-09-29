@@ -1,92 +1,35 @@
 package com.gunder.myservice
 
-import android.app.IntentService
-import android.content.Intent
 import android.content.Context
+import android.content.Intent
+import android.util.Log
+import androidx.core.app.JobIntentService
 
-// TODO: Rename actions, choose action names that describe tasks that this
-// IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
-private const val ACTION_FOO = "com.gunder.myservice.action.FOO"
-private const val ACTION_BAZ = "com.gunder.myservice.action.BAZ"
-
-// TODO: Rename parameters
-private const val EXTRA_PARAM1 = "com.gunder.myservice.extra.PARAM1"
-private const val EXTRA_PARAM2 = "com.gunder.myservice.extra.PARAM2"
-
-/**
- * An [IntentService] subclass for handling asynchronous task requests in
- * a service on a separate handler thread.
-
- * TODO: Customize class - update intent actions, extra parameters and static
- * helper methods.
-
- */
-class MyJobIntentService : IntentService("MyJobIntentService") {
-
-    override fun onHandleIntent(intent: Intent?) {
-        when (intent?.action) {
-            ACTION_FOO -> {
-                val param1 = intent.getStringExtra(EXTRA_PARAM1)
-                val param2 = intent.getStringExtra(EXTRA_PARAM2)
-                handleActionFoo(param1, param2)
-            }
-            ACTION_BAZ -> {
-                val param1 = intent.getStringExtra(EXTRA_PARAM1)
-                val param2 = intent.getStringExtra(EXTRA_PARAM2)
-                handleActionBaz(param1, param2)
-            }
-        }
-    }
-
-    /**
-     * Handle action Foo in the provided background thread with the provided
-     * parameters.
-     */
-    private fun handleActionFoo(param1: String?, param2: String?) {
-        TODO("Handle action Foo")
-    }
-
-    /**
-     * Handle action Baz in the provided background thread with the provided
-     * parameters.
-     */
-    private fun handleActionBaz(param1: String?, param2: String?) {
-        TODO("Handle action Baz")
-    }
-
+class MyJobIntentService : JobIntentService() {
     companion object {
-        /**
-         * Starts this service to perform action Foo with the given parameters. If
-         * the service is already performing a task this action will be queued.
-         *
-         * @see IntentService
-         */
-        // TODO: Customize helper method
-        @JvmStatic
-        fun startActionFoo(context: Context, param1: String, param2: String) {
-            val intent = Intent(context, MyJobIntentService::class.java).apply {
-                action = ACTION_FOO
-                putExtra(EXTRA_PARAM1, param1)
-                putExtra(EXTRA_PARAM2, param2)
-            }
-            context.startService(intent)
-        }
+        private const val JOB_ID = 1000
+        internal const val EXTRA_DURATION = "extra_duration"
+        private val TAG = MyJobIntentService::class.java.simpleName
 
-        /**
-         * Starts this service to perform action Baz with the given parameters. If
-         * the service is already performing a task this action will be queued.
-         *
-         * @see IntentService
-         */
-        // TODO: Customize helper method
-        @JvmStatic
-        fun startActionBaz(context: Context, param1: String, param2: String) {
-            val intent = Intent(context, MyJobIntentService::class.java).apply {
-                action = ACTION_BAZ
-                putExtra(EXTRA_PARAM1, param1)
-                putExtra(EXTRA_PARAM2, param2)
-            }
-            context.startService(intent)
+        fun enqueueWork(context: Context, intent: Intent) {
+            enqueueWork(context, MyJobIntentService::class.java, JOB_ID, intent)
         }
+    }
+
+    override fun onHandleWork(intent: Intent) {
+        Log.d(TAG, "OnHandleWork: Mulai...")
+        val duration = intent.getLongExtra(EXTRA_DURATION, 0)
+        try {
+            Thread.sleep(duration)
+            Log.d(TAG, "OnHandleWork: selesai...")
+        } catch (e: InterruptedException) {
+            e.printStackTrace()
+            Thread.currentThread().interrupt()
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(TAG, "OnDestroy()")
     }
 }
