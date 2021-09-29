@@ -12,7 +12,7 @@ class MyBoundService : Service() {
         private val TAG = MyBoundService::class.java.simpleName
     }
 
-    private var mBinder = Binder()
+    private var mBinder = MyBinder()
     private var startTime = System.currentTimeMillis()
     private var mTimer: CountDownTimer = object : CountDownTimer(100000, 1000) {
         override fun onTick(millisUntilFinished: Long) {
